@@ -23,7 +23,33 @@ namespace Library.Models.Tests
     [TestMethod]
     public void Equals_EqualsOveride_True()
     {
-      Assert.AreEqual(NameOfTheWind, NameOfTheWind);
+      Book NameOfTheWind2 = new Book("Name Of The Wind");
+      Assert.AreEqual(NameOfTheWind, NameOfTheWind2);
+    }
+    [TestMethod]
+    public void GetAll_DatabaseEmptyAtFirst_EmptyList()
+    {
+      int result = Book.GetAll().Count;
+
+      Assert.AreEqual(0,result);
+    }
+    [TestMethod]
+    public void Save_SaveBookToDatabase_Book()
+    {
+      NameOfTheWind.Save();
+      Book result = Book.GetAll()[0];
+
+      Assert.AreEqual(NameOfTheWind, result);
+    }
+    [TestMethod]
+    public void Find_FindBookInDatabase_Book()
+    {
+      NameOfTheWind.Save();
+      WiseMansFear.Save();
+
+      Book result = Book.Find(NameOfTheWind.Id);
+
+      Assert.AreEqual(NameOfTheWind, result);
     }
   }
 }
