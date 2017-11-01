@@ -1,10 +1,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using Library.Controllers;
-using Library.Models;
+using LibraryDatabase.Controllers;
+using LibraryDatabase.Models;
 
-namespace Library.Tests
+namespace LibraryDatabase.Tests
 {
     [TestClass]
     public class HomeControllerTests

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MySql.Data.MySqlClient;
 
-namespace Library.Models
+namespace LibraryDatabase.Models
 {
   public class Book
   {
@@ -102,22 +102,6 @@ namespace Library.Models
         conn.Dispose();
       }
       return newBook;
-    }
-
-    public static void ClearAll()
-    {
-      MySqlConnection conn = DB.Connection();
-      conn.Open();
-
-      var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"DELETE FROM books;";
-      cmd.ExecuteNonQuery();
-
-      conn.Close();
-      if (conn != null)
-      {
-        conn.Dispose();
-      }
     }
   }
 }

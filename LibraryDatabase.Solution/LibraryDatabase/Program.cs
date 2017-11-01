@@ -1,7 +1,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Library
+namespace LibraryDatabase
 {
   public class Program
   {

@@ -1,4 +1,4 @@
-# Library
+# LibraryDatabase
 ##### by Adam Titus
 
 ### Description

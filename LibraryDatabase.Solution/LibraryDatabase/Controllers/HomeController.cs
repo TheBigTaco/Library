@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using Library.Models;
+using LibraryDatabase.Models;
 
-namespace Library.Controllers
+namespace LibraryDatabase.Controllers
 {
     public class HomeController : Controller
     {

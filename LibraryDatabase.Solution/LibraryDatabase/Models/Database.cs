@@ -1,8 +1,8 @@
 using System;
 using MySql.Data.MySqlClient;
-using Library;
+using LibraryDatabase;
 
-namespace Library.Models
+namespace LibraryDatabase.Models
 {
   public class DB
   {

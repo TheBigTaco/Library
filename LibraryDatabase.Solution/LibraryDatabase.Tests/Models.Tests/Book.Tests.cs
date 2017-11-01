@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Library.Models;
+using LibraryDatabase.Models;
 
-namespace Library.Models.Tests
+namespace LibraryDatabase.Models.Tests
 {
   [TestClass]
   public class BookTests : IDisposable
@@ -14,7 +14,7 @@ namespace Library.Models.Tests
 
     public void Dispose()
     {
-      Book.ClearAll();
+      Library.ClearAll();
     }
     public BookTests()
     {
