@@ -47,5 +47,47 @@ namespace LibraryDatabase.Models.Tests
 
       Assert.AreEqual(namelyBook, result);
     }
+    [TestMethod]
+    public void AddBook_AddsSameBookToAmountInLibrary_Int()
+    {
+      patricklyBook.Save();
+      namelyBook.Save();
+      patricklyBook.AddBook();
+      patricklyBook.AddBook();
+
+      Book result = Book.Find(patricklyBook.Id);
+
+      Assert.AreEqual(3, result.TotalAmount);
+    }
+    [TestMethod]
+    public void RemoveBook_RemovesSameBookFromAmountInLibrary_Int()
+    {
+      patricklyBook.Save();
+      namelyBook.Save();
+      patricklyBook.AddBook();
+      patricklyBook.AddBook();
+      patricklyBook.RemoveBook();
+      patricklyBook.RemoveBook();
+      patricklyBook.RemoveBook();
+
+      Book result = Book.Find(patricklyBook.Id);
+
+      Assert.AreEqual(0, result.TotalAmount);
+    }
+    [TestMethod]
+    public void RemoveBook_RemovesCheckedOutBookFromAmountInLibrary_Int()
+    {
+      patricklyBook.Save();
+      patricklyBook.AddBook();
+      patricklyBook.AddBook();
+      Book.Checkout(patricklyBook.Id);
+      Book.Checkout(patricklyBook.Id);
+      patricklyBook.RemoveBook(true);
+
+      Book result = Book.Find(patricklyBook.Id);
+
+      Assert.AreEqual(2, result.TotalAmount);
+      Assert.AreEqual(1, result.AvailableAmount);
+    }
   }
 }

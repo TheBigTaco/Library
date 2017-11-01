@@ -9,11 +9,15 @@ namespace LibraryDatabase.Models
   {
     public int Id {get; private set;}
     public string Title {get;}
+    public int TotalAmount {get; private set;}
+    public int AvailableAmount {get; private set;}
 
-    public Book (string title, int id = 0)
+    public Book (string title, int id = 0, int total = 0, int available = 0)
     {
       Id = id;
       Title = title;
+      TotalAmount = total;
+      AvailableAmount = available;
     }
 
     public override bool Equals(object other)
@@ -39,11 +43,60 @@ namespace LibraryDatabase.Models
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO books (title) VALUES (@title);";
+      cmd.CommandText = @"INSERT INTO books (title, total_amount, available_amount) VALUES (@title, 1, 1);";
       cmd.Parameters.Add(new MySqlParameter("@title", Title));
       cmd.ExecuteNonQuery();
       Id = (int)cmd.LastInsertedId;
+      TotalAmount = 1;
+      AvailableAmount = 1;
 
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+    public void AddBook()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"UPDATE books SET total_amount = total_amount + 1; UPDATE books SET available_amount = available_amount + 1;";
+
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+    public void RemoveBook(bool checkedOut = false)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"UPDATE books SET total_amount = total_amount - 1 AND total_amount > 0;";
+      if(checkedOut == false)
+      {
+        cmd.CommandText += @"UPDATE books SET available_amount = available_amount - 1 AND available_amount > 0;";
+      }
+      cmd.ExecuteNonQuery();
+
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+    public static void Checkout(int id)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"UPDATE books SET available_amount = available_amount - 1 and available_amount > 0;";
+      cmd.ExecuteNonQuery();
       conn.Close();
       if (conn != null)
       {
@@ -86,12 +139,17 @@ namespace LibraryDatabase.Models
       var rdr = cmd.ExecuteReader() as MySqlDataReader;
       int id = 0;
       string title = "";
+      int total = 0;
+      int available = 0;
+
       while(rdr.Read())
       {
         id = rdr.GetInt32(0);
         title = rdr.GetString(1);
+        total = rdr.GetInt32(2);
+        available = rdr.GetInt32(3);
       }
-      Book output = new Book(title, id);
+      Book output = new Book(title, id, total, available);
 
       conn.Close();
       if (conn != null)
