@@ -13,7 +13,7 @@ namespace LibraryDatabase.Models
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"DELETE FROM authors_books; DELETE FROM books_patrons; DELETE FROM checkouts; DELETE FROM copies; DELETE FROM authors; DELETE FROM books; DELETE FROM patrons;";
+      cmd.CommandText = @"DELETE FROM authors_books; DELETE FROM checkouts; DELETE FROM authors; DELETE FROM books; DELETE FROM patrons;";
       cmd.ExecuteNonQuery();
 
       conn.Close();

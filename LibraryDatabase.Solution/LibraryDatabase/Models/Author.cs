@@ -5,32 +5,32 @@ using MySql.Data.MySqlClient;
 
 namespace LibraryDatabase.Models
 {
-  public class Book
+  public class Author
   {
     public int Id {get; private set;}
-    public string Title {get;}
+    public string Name {get;}
 
-    public Book (string title, int id = 0)
+    public Author (string name, int id = 0)
     {
       Id = id;
-      Title = title;
+      Name = name;
     }
 
     public override bool Equals(object other)
     {
-      if (!(other is Book))
+      if (!(other is Author))
       {
         return false;
       }
       else
       {
-        Book otherBook = (Book)other;
-        return this.Title == otherBook.Title;
+        Author otherAuthor = (Author)other;
+        return this.Name == otherAuthor.Name;
       }
     }
     public override int GetHashCode()
     {
-      return this.Title.GetHashCode();
+      return this.Name.GetHashCode();
     }
 
     public void Save()
@@ -39,8 +39,8 @@ namespace LibraryDatabase.Models
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO books (title) VALUES (@title);";
-      cmd.Parameters.Add(new MySqlParameter("@title", Title));
+      cmd.CommandText = @"INSERT INTO authors (name) VALUES (@name);";
+      cmd.Parameters.Add(new MySqlParameter("@name", Name));
       cmd.ExecuteNonQuery();
       Id = (int)cmd.LastInsertedId;
 
@@ -51,20 +51,20 @@ namespace LibraryDatabase.Models
       }
     }
 
-    public static List<Book> GetAll()
+    public static List<Author> GetAll()
     {
-      List<Book> output = new List<Book> {};
+      List<Author> output = new List<Author> {};
       MySqlConnection conn = DB.Connection();
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT * FROM books;";
+      cmd.CommandText = @"SELECT * FROM authors;";
       var rdr = cmd.ExecuteReader() as MySqlDataReader;
       while(rdr.Read())
       {
         int id = rdr.GetInt32(0);
-        string title = rdr.GetString(1);
-        output.Add(new Book(title, id));
+        string name = rdr.GetString(1);
+        output.Add(new Author(name, id));
       }
 
       conn.Close();
@@ -75,23 +75,23 @@ namespace LibraryDatabase.Models
       return output;
     }
 
-    public static Book Find(int searchId)
+    public static Author Find(int searchId)
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"SELECT * FROM books WHERE id = @id;";
+      cmd.CommandText = @"SELECT * FROM authors WHERE id = @id;";
       cmd.Parameters.Add(new MySqlParameter("@id", searchId));
       var rdr = cmd.ExecuteReader() as MySqlDataReader;
       int id = 0;
-      string title = "";
+      string name = "";
       while(rdr.Read())
       {
         id = rdr.GetInt32(0);
-        title = rdr.GetString(1);
+        name = rdr.GetString(1);
       }
-      Book output = new Book(title, id);
+      Author output = new Author(name, id);
 
       conn.Close();
       if (conn != null)

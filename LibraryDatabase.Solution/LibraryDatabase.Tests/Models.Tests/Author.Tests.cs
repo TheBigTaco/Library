@@ -7,45 +7,45 @@ using LibraryDatabase.Models;
 namespace LibraryDatabase.Models.Tests
 {
   [TestClass]
-  public class BookTests : IDisposable
+  public class AuthorTests : IDisposable
   {
-    private Book namelyBook = new Book("Name of The Wind");
-    private Book namelyBookToo = new Book("Name of The Wind");
-    private Book windlyBook = new Book("Windly Name the of");
-    private Book patricklyBook = new Book("Patrick");
+    private Author bill = new Author("Bill Billson");
+    private Author otherBill = new Author("Bill Billson");
+    private Author jim = new Author("Jim Jimson");
+    private Author patrick = new Author("Patrick Rothejaksl");
 
     public void Dispose()
     {
       Library.ClearAll();
     }
-    public BookTests()
+    public AuthorTests()
     {
       DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=library_test;";
     }
     [TestMethod]
     public void Equals_AreTheSame_True()
     {
-      Assert.AreEqual(namelyBook, namelyBookToo);
+      Assert.AreEqual(bill, otherBill);
     }
     [TestMethod]
     public void Save_AddToDatabase_EntryAdded()
     {
-      patricklyBook.Save();
+      patrick.Save();
 
-      int result = Book.GetAll().Count;
+      int result = Author.GetAll().Count;
 
       Assert.AreEqual(1, result);
     }
     [TestMethod]
     public void Find_FindsInDatabase_EntryFound()
     {
-      patricklyBook.Save();
-      namelyBook.Save();
-      windlyBook.Save();
+      patrick.Save();
+      bill.Save();
+      otherBill.Save();
 
-      Book result = Book.Find(namelyBook.Id);
+      Author result = Author.Find(bill.Id);
 
-      Assert.AreEqual(namelyBook, result);
+      Assert.AreEqual(bill, result);
     }
   }
 }
