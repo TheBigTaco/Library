@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using Rename.Models;
+using Library.Models;
 
-namespace Rename.Controllers
+namespace Library.Controllers
 {
     public class HomeController : Controller
     {
