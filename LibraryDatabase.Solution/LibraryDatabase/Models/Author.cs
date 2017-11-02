@@ -100,5 +100,30 @@ namespace LibraryDatabase.Models
       }
       return output;
     }
+    public static List<Book> GetBooks(int authorId)
+    {
+      List<Book> output = new List<Book>{};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT books.* FROM books JOIN authors_books ON (books.id = authors_books.book_id) WHERE author_id = @authorId;";
+      cmd.Parameters.Add(new MySqlParameter("@authorId", authorId));
+
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        string bookTitle = rdr.GetString(1);
+        int bookId = rdr.GetInt32(0);
+        Book newBook = new Book(bookTitle, bookId);
+        output.Add(newBook);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return output;
+    }
   }
 }
