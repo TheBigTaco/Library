@@ -63,10 +63,21 @@ namespace LibraryDatabase.Models.Tests
       NameOfTheWind.Save();
       me.Save();
       Library.Checkout(NameOfTheWind.Id, me.Id);
-      List<Book> result = Patron.GetCheckedOutBooks(me.Id);
+      List<Book> result = Patron.GetCheckOutHistory(me.Id);
       List<Book> testList = new List<Book>{NameOfTheWind};
 
       CollectionAssert.AreEqual(testList, result);
+    }
+    [TestMethod]
+    public void GetOverDueBooks_GetsListOfAllOverDueBooks_BookList()
+    {
+      NameOfTheWind.Save();
+      me.Save();
+      Library.Checkout(NameOfTheWind.Id, me.Id);
+      List<Book> result = Library.GetOverDueBooks();
+      List<Book> test = new List<Book>{};
+
+      CollectionAssert.AreEqual(test, result);
     }
   }
 }

@@ -101,7 +101,7 @@ namespace LibraryDatabase.Models
       return output;
     }
 
-    public static List<Book> GetCheckedOutBooks(int patronId)
+    public static List<Book> GetCheckOutHistory(int patronId)
     {
       List<Book> output = new List<Book>{};
 
@@ -118,6 +118,29 @@ namespace LibraryDatabase.Models
         string bookTitle = rdr.GetString(1);
         Book newBook = new Book(bookTitle, bookId);
         output.Add(newBook);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return output;
+    }
+
+    public static DateTime GetDueDate(int bookId, int patronId)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT due_date FROM checkouts WHERE book_id = @bookId AND patron_id = @patronId;";
+      cmd.Parameters.Add(new MySqlParameter("@bookId", bookId));
+      cmd.Parameters.Add(new MySqlParameter("@patronId", patronId));
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      DateTime output = new DateTime();
+      while(rdr.Read())
+      {
+        output = rdr.GetDateTime(0);
       }
       conn.Close();
       if (conn != null)

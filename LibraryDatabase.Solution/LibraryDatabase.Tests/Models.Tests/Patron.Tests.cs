@@ -13,6 +13,7 @@ namespace LibraryDatabase.Models.Tests
     private Patron otherBill = new Patron("Bill Billson");
     private Patron jim = new Patron("Jim Jimson");
     private Patron patrick = new Patron("Patrick Rothejaksl");
+    private Book book = new Book ("book");
 
     public void Dispose()
     {
@@ -46,6 +47,18 @@ namespace LibraryDatabase.Models.Tests
       Patron result = Patron.Find(bill.Id);
 
       Assert.AreEqual(bill, result);
+    }
+    [TestMethod]
+    public void GetDueDate_GetBookDueDate_DateTime()
+    {
+      patrick.Save();
+      book.Save();
+
+      Library.Checkout(book.Id, patrick.Id);
+      string result = Patron.GetDueDate(book.Id, patrick.Id).ToString("yyyy-MM-dd");
+      string test = DateTime.Now.AddDays(Library.CheckoutLength).ToString("yyyy-MM-dd");
+
+      Assert.AreEqual(test, result);
     }
   }
 }
