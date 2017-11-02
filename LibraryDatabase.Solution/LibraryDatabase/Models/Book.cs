@@ -77,10 +77,10 @@ namespace LibraryDatabase.Models
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"UPDATE books SET total_amount = total_amount - 1 AND total_amount > 0;";
+      cmd.CommandText = @"UPDATE books SET total_amount = total_amount - 1 WHERE total_amount > 0;";
       if(checkedOut == false)
       {
-        cmd.CommandText += @"UPDATE books SET available_amount = available_amount - 1 AND available_amount > 0;";
+        cmd.CommandText += @"UPDATE books SET available_amount = available_amount - 1 WHERE available_amount > 0;";
       }
       cmd.ExecuteNonQuery();
 
@@ -95,7 +95,7 @@ namespace LibraryDatabase.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"UPDATE books SET available_amount = available_amount - 1 and available_amount > 0;";
+      cmd.CommandText = @"UPDATE books SET available_amount = available_amount - 1 WHERE available_amount > 0;";
       cmd.ExecuteNonQuery();
       conn.Close();
       if (conn != null)

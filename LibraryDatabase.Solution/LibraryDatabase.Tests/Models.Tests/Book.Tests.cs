@@ -75,7 +75,20 @@ namespace LibraryDatabase.Models.Tests
       Assert.AreEqual(0, result.TotalAmount);
     }
     [TestMethod]
-    public void RemoveBook_RemovesCheckedOutBookFromAmountInLibrary_Int()
+    public void RemoveBook_RemovesSameBookNotNegativeFromAmountInLibrary_Int()
+    {
+      patricklyBook.Save();
+      namelyBook.Save();
+      patricklyBook.RemoveBook();
+      patricklyBook.RemoveBook();
+      patricklyBook.RemoveBook();
+
+      Book result = Book.Find(patricklyBook.Id);
+
+      Assert.AreEqual(0, result.TotalAmount);
+    }
+    [TestMethod]
+    public void Checkout_RemovesCheckedOutBookFromAmountInLibrary_Int()
     {
       patricklyBook.Save();
       patricklyBook.AddBook();
@@ -85,9 +98,24 @@ namespace LibraryDatabase.Models.Tests
       patricklyBook.RemoveBook(true);
 
       Book result = Book.Find(patricklyBook.Id);
-
       Assert.AreEqual(2, result.TotalAmount);
       Assert.AreEqual(1, result.AvailableAmount);
+    }
+    [TestMethod]
+    public void Checkout_RemovesCheckedOutBookNotNegativeFromAmountInLibrary_Int()
+    {
+      patricklyBook.Save();
+      patricklyBook.AddBook();
+      patricklyBook.AddBook();
+      Book.Checkout(patricklyBook.Id);
+      Book.Checkout(patricklyBook.Id);
+      Book.Checkout(patricklyBook.Id);
+      Book.Checkout(patricklyBook.Id);
+      patricklyBook.RemoveBook(true);
+
+      Book result = Book.Find(patricklyBook.Id);
+      Assert.AreEqual(2, result.TotalAmount);
+      Assert.AreEqual(0, result.AvailableAmount);
     }
   }
 }
