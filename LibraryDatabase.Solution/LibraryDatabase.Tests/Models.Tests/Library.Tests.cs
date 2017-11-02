@@ -13,6 +13,7 @@ namespace LibraryDatabase.Models.Tests
     private Book WiseMansFear = new Book("Wise Mans Fear");
     private Author patrick = new Author("Patrick Rothfusalsdkjf;aksdhfj");
     private Author dr = new Author("Doctor SUESsSsSsSs");
+    private Patron me = new Patron("Patreon");
 
     public void Dispose()
     {
@@ -54,6 +55,17 @@ namespace LibraryDatabase.Models.Tests
       Library.AddAuthorToBook(patrick.Id, WiseMansFear.Id);
       List<Book> result = Author.GetBooks(patrick.Id);
       List<Book> testList = new List<Book>{NameOfTheWind, WiseMansFear};
+      CollectionAssert.AreEqual(testList, result);
+    }
+    [TestMethod]
+    public void Checkout_CheckoutBookToPatron_CheckedOutBook()
+    {
+      NameOfTheWind.Save();
+      me.Save();
+      Library.Checkout(NameOfTheWind.Id, me.Id);
+      List<Book> result = Patron.GetCheckedOutBooks(me.Id);
+      List<Book> testList = new List<Book>{NameOfTheWind};
+
       CollectionAssert.AreEqual(testList, result);
     }
   }

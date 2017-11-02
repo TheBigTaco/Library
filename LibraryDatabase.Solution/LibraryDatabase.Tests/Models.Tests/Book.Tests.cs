@@ -13,6 +13,7 @@ namespace LibraryDatabase.Models.Tests
     private Book namelyBookToo = new Book("Name of The Wind");
     private Book windlyBook = new Book("Windly Name the of");
     private Book patricklyBook = new Book("Patrick");
+    private Patron me = new Patron ("Patreon");
 
     public void Dispose()
     {
@@ -88,13 +89,14 @@ namespace LibraryDatabase.Models.Tests
       Assert.AreEqual(0, result.TotalAmount);
     }
     [TestMethod]
-    public void Checkout_RemovesCheckedOutBookFromAmountInLibrary_Int()
+    public void RemoveBook_RemovesCheckedOutBookFromAmountInLibrary_Int()
     {
       patricklyBook.Save();
       patricklyBook.AddBook();
       patricklyBook.AddBook();
-      Book.Checkout(patricklyBook.Id);
-      Book.Checkout(patricklyBook.Id);
+      me.Save();
+      Library.Checkout(patricklyBook.Id, me.Id);
+      Library.Checkout(patricklyBook.Id, me.Id);
       patricklyBook.RemoveBook(true);
 
       Book result = Book.Find(patricklyBook.Id);
@@ -102,15 +104,16 @@ namespace LibraryDatabase.Models.Tests
       Assert.AreEqual(1, result.AvailableAmount);
     }
     [TestMethod]
-    public void Checkout_RemovesCheckedOutBookNotNegativeFromAmountInLibrary_Int()
+    public void RemoveBook_RemovesCheckedOutBookNotNegativeFromAmountInLibrary_Int()
     {
       patricklyBook.Save();
       patricklyBook.AddBook();
       patricklyBook.AddBook();
-      Book.Checkout(patricklyBook.Id);
-      Book.Checkout(patricklyBook.Id);
-      Book.Checkout(patricklyBook.Id);
-      Book.Checkout(patricklyBook.Id);
+      me.Save();
+      Library.Checkout(patricklyBook.Id, me.Id);
+      Library.Checkout(patricklyBook.Id, me.Id);
+      Library.Checkout(patricklyBook.Id, me.Id);
+      Library.Checkout(patricklyBook.Id, me.Id);
       patricklyBook.RemoveBook(true);
 
       Book result = Book.Find(patricklyBook.Id);

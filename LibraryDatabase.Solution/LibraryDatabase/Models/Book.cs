@@ -90,19 +90,6 @@ namespace LibraryDatabase.Models
         conn.Dispose();
       }
     }
-    public static void Checkout(int id)
-    {
-      MySqlConnection conn = DB.Connection();
-      conn.Open();
-      var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"UPDATE books SET available_amount = available_amount - 1 WHERE available_amount > 0;";
-      cmd.ExecuteNonQuery();
-      conn.Close();
-      if (conn != null)
-      {
-        conn.Dispose();
-      }
-    }
 
     public static List<Book> GetAll()
     {
